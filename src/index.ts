@@ -1,85 +1,94 @@
 import express from 'express';
-import fs from 'fs'
-import { promises as fsPromises } from 'fs';
-import { Http2ServerResponse } from 'http2';
-import sharp from 'sharp'
+import fs from 'fs';
+import sharp from 'sharp';
+import { query, validationResult } from 'express-validator';
 
-const app = express();
+export const app = express();
 
 const port = 3000;
 
-const images = ['encenadaport.jpg', 'fjord.jpg', 'icelandwaterfall.jpg', 'palmtunnel.jpg', 'santamonica.jpg']
-
+export let resizedImages: {fileName: string, width: number, height:number}[] = [];
 
 app.listen(port, (()=>{
   console.log(`The server has been se up on port ${port}`);
 }));
 
-app.get('/images', (req,res)=>{
+app.get('/images', 
+[
+  query('filename').isString().withMessage('Only letters and digits allowed in title.').trim(),
+  query('width').isNumeric(), 
+  query('height').isNumeric()
+] , (req: express.Request,res: express.Response)=>{
 
-  const fileName = req.query.filename as string
-  const width = (req.query.width as unknown) as string
-  const height = (req.query.height as unknown) as string
-  
-  getMetadata(fileName)
-  resizeImage(fileName,width,height).then(()=>
-  showImage(res, fileName))
-  
-  
-})
-
-  const getMetadata = async (fileName: string) => {
-  try {
-    const metadata = await sharp(`./images/${fileName}.jpg`).metadata();
-  // console.log(metadata);
-  } catch (error) {
-    console.log(`An error occurred during processing: ${error}`)
+  const errors = validationResult(req);
+  const fileName = req.query.filename as string;
+  const width = parseInt(req.query.width as string);
+  const height = parseInt(req.query.height as string);
+  let fileFound: boolean = false;
+  if (!errors.isEmpty()) {
+    console.log("error occured")
+   return res.status(422).json({ errors: errors.array() });
   }
-}
+  const handleRequest = () :number=>{
+    if (resizedImages.includes({fileName, width, height})){
+      fileFound = true;
+          showImage(res, fileName);
+    }
+
+    if (resizedImages.length === 0 || !fileFound){
+      resizeImage(fileName,width,height).then(()=>
+        showImage(res, fileName));
+    }
+
+    
+
+    // fs.readdir(`./image-resized`, function (err, files){
+    //   files.forEach((file) => {
+    //     resizedImages.push(file)
+    //   })
+    // })
+
+    return resizedImages.length
+  };
+
+  handleRequest()
+
+});
 
 
-const resizeImage = async (fileName:string, width: string, height: string) => {
-  console.log(height,width)
+const resizeImage = async (fileName:string, width: number, height: number) => {
+  // console.log(height,width);
   try {
     await sharp(`./images/${fileName}.jpg`)
       .resize({
-        width: parseInt(width),
-        height: parseInt(height)
+        width: width as number,
+        height: height as number
       })
       .toFile(`./image-resized/${fileName}.jpg`);
+    resizedImages.push({fileName, width, height});
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 const showImage = (res: any, fileName: string) => {
   fs.readFile(`./image-resized/${fileName}.jpg`, function (err, content) {
-        if (err) {
-            res.writeHead(400, {'Content-type':'text/html'})
-            console.log(err);
-            res.end("No such image");    
-        } else {
-            //specify the content type in the response will be an image
-            res.writeHead(200,{'Content-type':'image/jpg'});
-            res.end(content);
-        }
-  })
+    if (err) {
+      res.writeHead(400, {'Content-type':'text/html'});
+      console.log(err);
+      res.end('No such image');
+    } else {
+      //specify the content type in the response will be an image
+      res.writeHead(200,{'Content-type':'image/jpg'});
+      res.end(content);
+    }
+  });
+};
+
+
+
+module.exports = {
+app, // To test endpoints
+resizedImages // To test if the promises resolves
+// handleRequests .. to test if the caching works
 }
-
-  // res.send('Converting now...');
-  // csv().fromFile(inputFile).then((data)=>{
-  //   let newData = data.map(
-  //     (item:{ first_name: string, last_name: string, phone: string
-  //   })=>{
-  //       let firstName = item.first_name;
-  //       let secondtName = item.last_name;
-  //       let phone = item.phone;
-
-  //       if (item.phone === ''){
-  //         phone = 'empty cell';
-  //       }
-  //       return {firstName, secondtName, phone};
-  //     });
-
-  //   fsPromises.writeFile(outputFile, JSON.stringify(newData));
-  // });
