@@ -1,7 +1,7 @@
 {
-  "name": "storefront",
+  "name": "imageprocessingapi-udacity",
   "version": "1.0.0",
-  "description": "This repo contains a basic Node and Express app in **Typescript**  to get you started in constructing an API.",
+  "description": "This repo represents an Image processing API, which its main purpose and functionality is to resize images to certain width and height ,loading them to the browser, and caching it to another folder in the disk.",
   "main": "index.ts",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
@@ -43,11 +43,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Elshafeay/TS-ENV.git"
+    "url": "git+https://github.com/OmarMo7/Udacity-Project-1--Image-Processing-API.git"
   },
   "keywords": [],
-  "bugs": {
-    "url": "https://github.com/Elshafeay/TS-ENV/issues"
-  },
-  "homepage": "https://github.com/Elshafeay/TS-ENV#readme"
+  "homepage": "https://github.com/OmarMo7"
 }
