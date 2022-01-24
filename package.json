@@ -4,7 +4,7 @@
   "description": "This repo contains a basic Node and Express app in **Typescript**  to get you started in constructing an API.",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node-dev index.ts",
+    "start": "ts-node-dev src/index.ts",
     "build": "rm -rf ./dist/* && tsc --build",
     "lint": "eslint . --ext .ts",
     "prettier": "eslint . --ext .ts --fix",
@@ -38,7 +38,8 @@
     "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.4.0",
     "prettier": "^2.5.1",
-    "ts-node": "^9.1.1"
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.8"
   },
   "repository": {
     "type": "git",
