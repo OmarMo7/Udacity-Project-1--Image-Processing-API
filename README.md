@@ -1,23 +1,20 @@
 ## Getting Started
 
-This repo contains a basic Node and Express app in **Typescript**  to get you started in constructing an API.
+This repo represents an Image processing API, which its main purpose and functionality is to resize images to certain width and height ,loading them to the browser, and caching it to another folder in the disk.
 
-## Prerequisites Technologies
+## Libraries & Technologies used
 
-Your must install the following in order to use the project:
-- [Node & NPM](https://nodejs.org/en/download/)
-- [Typescript](https://www.npmjs.com/package/typescript) (install it globally)
+- **Express**
+was used as a basic web framework to build up and set server, routes, and requests.
 
-## Setup Steps
-To get started, clone this repo and open your terminal at the project root.
+- **Sharp**
+was used to resize images after asynchronously reaching the endpoint.
 
-and then in your terminal run:
-1. `npm install`
-2. `cp .env.example .env`
-2. `npm start`
+- **Filesystem**
+was used to control the files within both *images* and *image-resized*.
+ 
+- **Jasmine**
+was used to apply tests on functions and endpoints.
 
-and then head to your browser at `localhost:3000` and it should be working.
-
-#### Notes
-1. To run your tests you can simply run `npm test`.
-2. You can modify your environment variables through the `.env` file.
+- **Supertest**
+was used to be able to test endpoints integrated with *jasmine*.
