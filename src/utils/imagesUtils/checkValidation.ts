@@ -26,8 +26,8 @@ const checkValidation = (req: express.Request, res: express.Response, next: expr
     res.status(422).send('File name is missing');
   }
 
-  // Either width or height or both values are not provided
-  else if (isNaN(width) || isNaN(height)) {
+  // Either width, height or both values are not provided
+  else if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
     res.status(422).send('Invalid input for width or height');
   }
 

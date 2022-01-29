@@ -8,11 +8,11 @@ app.use('/api', checkValidation); // Applying middleware
 app.use('/api', router);
 const port = 3000;
 
-app.get('/', (req, res): void => {
+app.get('/', (req: express.Request, res: express.Response): void => {
   res.status(200).send('Welcome to my Image Processing API.');
 });
 
-app.listen(port, () => {
+app.listen(port, (): void => {
   console.log(`The server has been se up on port ${port}`);
 });
 
