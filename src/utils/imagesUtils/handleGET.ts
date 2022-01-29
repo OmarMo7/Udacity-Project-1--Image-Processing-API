@@ -25,7 +25,7 @@ export const handleRequest = (res: express.Response, fileName: string, width: nu
 /*
  * This function was built up to resize the image
  */
-export const resizeImage = async (fileName: string, width: number, height: number) : Promise<any> => {
+export const resizeImage = async (fileName: string, width: number, height: number): Promise<any> => {
   try {
     const sharpInst = await sharp(`./images/${fileName}.jpg`)
       .resize({
@@ -34,39 +34,27 @@ export const resizeImage = async (fileName: string, width: number, height: numbe
       })
       .toFile(`./image-resized/${fileName}.jpg`);
     resizedImages.push({ fileName, width, height });
-      const metadata = await sharp(`./image-resized/${fileName}.jpg`).metadata()
-      console.log(metadata.width)
-    return metadata
-
+    const metadata = await sharp(`./image-resized/${fileName}.jpg`).metadata();
+    return metadata;
   } catch (error) {
     console.log(error);
   }
 
-  return {}
+  return {};
 };
 
 /*
  * This function is responsible for showing the image after retrieving and reading it from which folder it was saved in
  */
-const showImage = (res: express.Response, fileName: string) :void => {
+const showImage = (res: express.Response, fileName: string): void => {
   fs.readFile(`./image-resized/${fileName}.jpg`, function (err, content) {
-    if (err) {
-      // the input name is valid but does not exist
-      if (fileName.length !== 0) {
-        res.header({ 'Content-type': 'text/html' });
-        res.status(404);
-        console.log(err);
-        res.end('404 NOT FOUND');
-      }
-    } else {
-      res.header({ 'Content-type': 'image/jpg' });
-      res.status(200);
-      res.end(content);
-    }
+    res.header({ 'Content-type': 'image/jpg' });
+    res.status(200);
+    res.end(content);
   });
 };
 
-module.exports={
+module.exports = {
   resizeImage,
-  handleRequest
+  handleRequest,
 };
