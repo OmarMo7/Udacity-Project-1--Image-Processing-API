@@ -44,4 +44,4 @@ const checkValidation = (req: express.Request, res: express.Response, next: expr
   next();
 };
 
-export default checkValidation
+export default checkValidation;

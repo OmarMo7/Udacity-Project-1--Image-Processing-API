@@ -21,6 +21,7 @@ was used to be able to test endpoints integrated with *jasmine*.
 
 
 ## Accessing the application
+- Entry point to the application [Image Processing API](http://localhost:3000/)
 - To access the application go throw this example link >>> [Image Processing API](http://localhost:3000/api/images?filename=fjord&width=200&height=200).
 
 
